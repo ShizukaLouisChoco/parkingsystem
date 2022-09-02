@@ -65,6 +65,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
+            boolean isRecurringVehicle = recurringVehicle(vehicleRegNumber);
+            ticket.setDiscount(isRecurringVehicle);
             return ticket;
         }
     }
@@ -85,5 +87,29 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
         return false;
+    }
+
+    private boolean recurringVehicle(String vehicleRegNumber){
+        Connection con = null;
+        int recurringTime = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKETS);
+            ps.setString(1,vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            recurringTime = rs.getInt(1);
+            //todo : reccuper le numbre et return true si > 0, sinon false
+
+            if (recurringTime > 0){
+                return true;
+            }else{
+            return false;
+            }
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+            return false;
+        }
     }
 }

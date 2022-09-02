@@ -89,10 +89,6 @@ public class FareCalculatorServiceTest {
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
-        System.out.println("inTimeinTest" + inTime);
-        System.out.println("outTimeinTest" + outTime);
-
-
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
