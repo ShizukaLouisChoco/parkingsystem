@@ -1,7 +1,10 @@
 package com.parkit.parkingsystem.constants;
 
-public class DBConstants {
+import com.parkit.parkingsystem.model.Ticket;
 
+public class DBConstants {
+    public static Ticket ticket = new Ticket();
+    public static String vehicleRegNumber =ticket.getVehicleRegNumber();
     public static final String GET_NEXT_PARKING_SPOT = "select min(PARKING_NUMBER) from parking where AVAILABLE = true and TYPE = ?";
     public static final String UPDATE_PARKING_SPOT = "update parking set available = ? where PARKING_NUMBER = ?";
 

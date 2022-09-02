@@ -124,4 +124,6 @@ public class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
+    @Test void RecurringCarIs5PercentDiscount(){}
+
 }
