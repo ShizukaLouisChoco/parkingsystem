@@ -124,6 +124,39 @@ public class FareCalculatorServiceTest {
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
     }
 
-    @Test void RecurringCarIs5PercentDiscount(){}
+    @Test
+    public void BikeRecurringUsesHave5PercentDiscount(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );//Parking time is 1 hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        String vehicleRegNumber = "123456789";
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber(vehicleRegNumber);
+        ticket.setDiscount(true);
+        fareCalculatorService.calculateFare(ticket);
 
+        //     assertEquals("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.",fareCalculatorService.RecurringUserDiscount());
+        assertEquals( ((1 * Fare.BIKE_RATE_PER_HOUR) * 0.95) , ticket.getPrice());
+    }
+
+    @Test
+    public void CarRecurringUsesHave5PercentDiscount(){
+        Date inTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );//Parking time is 1 hour
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+        String vehicleRegNumber = "123456789";
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber(vehicleRegNumber);
+        ticket.setDiscount(true);
+        fareCalculatorService.calculateFare(ticket);
+
+        // assertEquals("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.",fareCalculatorService.calculateFare(ticket));
+        assertEquals( ((1 * Fare.CAR_RATE_PER_HOUR) * 0.95) , ticket.getPrice());
+    }
 }
