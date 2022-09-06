@@ -189,7 +189,6 @@ public class FareCalculatorServiceTest {
         ticket.setDiscount(true);
         fareCalculatorService.calculateFare(ticket);
 
-        //     assertEquals("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.",fareCalculatorService.RecurringUserDiscount());
         assertEquals( ((1 * Fare.BIKE_RATE_PER_HOUR) * 0.95) , ticket.getPrice());
     }
 
@@ -207,7 +206,6 @@ public class FareCalculatorServiceTest {
         ticket.setDiscount(true);
         fareCalculatorService.calculateFare(ticket);
 
-        // assertEquals("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.",fareCalculatorService.calculateFare(ticket));
         assertEquals( ((1 * Fare.CAR_RATE_PER_HOUR) * 0.95) , ticket.getPrice());
     }
 }
