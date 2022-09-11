@@ -30,7 +30,7 @@ public class FareCalculatorServiceTest {
         ticket = new Ticket();
     }
 
-    private static Object[][] calculateFareMoreThenOneHour() {
+    private static Object[][] calculateFareAll() {
         return new Object[][]{
                 //ParkingType, minutes, discount, expected price
                 { ParkingType.CAR , 5 ,false, 0},//5 minutes
@@ -71,13 +71,13 @@ public class FareCalculatorServiceTest {
 
 
     @ParameterizedTest
-    @MethodSource("calculateFareMoreThenOneHour")
-    public void calculateFare(ParkingType parkingType, Integer timeIneMinute, boolean discount, double fare){
+    @MethodSource("calculateFareAll")
+    public void calculateFare(ParkingType parkingType, Integer timeInMinute, boolean discount, double fare){
         //GIVEN
         ParkingSpot parkingSpot = new ParkingSpot(1, parkingType,false);
 
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - ( timeIneMinute * 60 * 1000 ) );
+        inTime.setTime( System.currentTimeMillis() - ( timeInMinute * 60 * 1000 ) );
         Date outTime = new Date();
 
         ticket.setInTime(inTime);
