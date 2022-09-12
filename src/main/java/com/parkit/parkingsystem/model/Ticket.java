@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Ticket {
