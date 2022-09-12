@@ -61,14 +61,14 @@ public class TicketDAO {
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
+
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            boolean isRecurringVehicle = recurringVehicle(vehicleRegNumber);
-            ticket.setDiscount(isRecurringVehicle);
-            return ticket;
         }
+
+       return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {
@@ -77,8 +77,9 @@ public class TicketDAO {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
             ps.setDouble(1, ticket.getPrice());
-            ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
-            ps.setInt(3,ticket.getId());
+            ps.setTimestamp(2, new Timestamp(ticket.getInTime().getTime()));
+            ps.setTimestamp(3, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
+            ps.setInt(4,ticket.getId());
             ps.execute();
             return true;
         }catch (Exception ex){
@@ -89,25 +90,23 @@ public class TicketDAO {
         return false;
     }
 
-    private boolean recurringVehicle(String vehicleRegNumber){
+    public boolean recurringVehicle(String vehicleRegNumber){
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKETS);
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
-            int recurringTime = rs.getInt(1);
-            //todo : recuperer le nombre et return true si > 0, sinon false
-            if (recurringTime > 0){
-                return true;
-            }else{
-            return false;
+            if(rs.next()) {
+                int recurringTime = rs.getInt(1);
+                //todo : recuperer le nombre et return true si > 0, sinon false
+                return (recurringTime > 0);
             }
         }catch (Exception ex){
             logger.error("Error verifying recurring user or not",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return false;
         }
+        return false;
     }
 }

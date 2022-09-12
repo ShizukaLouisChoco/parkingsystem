@@ -9,6 +9,7 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import junit.framework.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -17,6 +18,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.util.Date;
 
 import static com.parkit.parkingsystem.constants.DBConstants.ticket;
 import static junit.framework.Assert.assertEquals;
@@ -30,6 +33,8 @@ public class ParkingDataBaseIT {
     private static TicketDAO ticketDAO;
     private static DataBasePrepareService dataBasePrepareService;
 
+
+    private static final String regNumber = "ABCDEF";
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -46,9 +51,8 @@ public class ParkingDataBaseIT {
     @BeforeEach
     public void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(regNumber);
         dataBasePrepareService.clearDataBaseEntries();
-
     }
 
     @AfterAll
@@ -59,9 +63,13 @@ public class ParkingDataBaseIT {
     @Test
     public void testParkingACar(){
         //GIVEN
-                //WHEN
-
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        //Ticket doesn't exist
+        Assertions.assertNull(ticketDAO.getTicket(regNumber));
+
+        //WHEN
+        //Vehicle incoming, and ticket creation
         parkingService.processIncomingVehicle();
         Ticket ticket = new Ticket();
         ticket = ticketDAO.getTicket("ABCDEF");
