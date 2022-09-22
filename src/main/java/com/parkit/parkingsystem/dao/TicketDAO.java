@@ -46,9 +46,9 @@ public class TicketDAO {
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
-            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
+            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             if(rs.next()){
                 ticket = new Ticket();
                 ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1), ParkingType.valueOf(rs.getString(6)),false);
@@ -82,6 +82,7 @@ public class TicketDAO {
             ps.setInt(4,ticket.getId());
             ps.execute();
             return true;
+            //todo:cloture ps et rs
         }catch (Exception ex){
             logger.error("Error saving ticket info",ex);
         }finally {
@@ -99,8 +100,8 @@ public class TicketDAO {
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
                 int recurringTime = rs.getInt(1);
-                //todo : recuperer le nombre et return true si > 0, sinon false
                 return (recurringTime > 0);
+                //todo cloture ps et rs
             }
         }catch (Exception ex){
             logger.error("Error verifying recurring user or not",ex);

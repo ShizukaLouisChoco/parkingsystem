@@ -20,7 +20,7 @@ public class InputReaderUtil {
             return -1;
         }
     }
-
+//todo: pas besoin de throws exceptions?
     public String readVehicleRegistrationNumber() throws Exception {
         try {
             String vehicleRegNumber= scan.nextLine();
