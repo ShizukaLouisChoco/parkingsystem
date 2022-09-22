@@ -105,8 +105,6 @@ public class ParkingDataBaseIT {
         Assertions.assertNotNull(exitTicket.getOutTime());
         Assertions.assertTrue(exitTicket.getOutTime().after(exitTicket.getInTime()));
         Assertions.assertTrue( exitTicket.getPrice() > 0 );
-
-        //TODO: check that the fare generated and out time are populated correctly in the database
     }
 
 }
