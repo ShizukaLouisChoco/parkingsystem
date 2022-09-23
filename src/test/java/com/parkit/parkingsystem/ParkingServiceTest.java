@@ -109,7 +109,34 @@ public class ParkingServiceTest {
 
     @ParameterizedTest
     @MethodSource("parkingType")
-    public void NextParkingNumberIsNotAvailable_ThenThrowsException(ParkingType parkingType){
+    public void NextParkingNumberIsNotAvailable_ThenThrowsException(ParkingType parkingType) {
+        //GIVEN
+        ParkingSpot parkingSpot = new ParkingSpot(-1, parkingType, false);
+
+        //WHEN
+
+        //THEN
+        assertThrows(Exception.class, () -> parkingService.getNextParkingNumberIfAvailable());
+    }
+    /*
+    @ParameterizedTest
+    @MethodSource("parkingType")
+    public void getIncorrectVehicleType_ThenThrowIllegalArgumentException(ParkingType parkingType){
+        //GIVEN
+        parkingType = null;
+        ParkingSpot parkingSpot = new ParkingSpot(1, parkingType,false);
+
+        //WHEN
+
+        //THEN
+        assertThrows(IllegalArgumentException.class,()->parkingService.getVehicleType());
+
+    }*/
+
+    /*
+    @ParameterizedTest
+    @MethodSource("parkingType")
+    public void getVehicleTypeBIKE(ParkingType parkingType){
         //GIVEN
         ParkingSpot parkingSpot = new ParkingSpot(-1, parkingType,false);
 
@@ -119,5 +146,6 @@ public class ParkingServiceTest {
         assertThrows(Exception.class,()->parkingService.getNextParkingNumberIfAvailable());
 
     }
+*/
 
 }

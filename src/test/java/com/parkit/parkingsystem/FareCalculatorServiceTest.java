@@ -105,12 +105,19 @@ public class FareCalculatorServiceTest {
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
-    @Test
-    public void calculateFareBikeWithFutureInTime(){
+    private static Object[][] vehicleTypes() {
+        return new Object[][]{
+                {ParkingType.CAR},
+                {ParkingType.BIKE}
+        };
+    }
+    @ParameterizedTest
+    @MethodSource("vehicleTypes")
+    public void calculateFareWithFutureInTime(ParkingType parkingType){
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() + (  60 * 60 * 1000) );
         Date outTime = new Date();
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+        ParkingSpot parkingSpot = new ParkingSpot(1, parkingType,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
