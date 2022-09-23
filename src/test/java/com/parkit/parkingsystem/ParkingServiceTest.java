@@ -8,6 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,8 +17,12 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 
+import static junit.framework.Assert.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -77,35 +82,30 @@ public class ParkingServiceTest {
 
     private static Object[][] incomingType() {
         return new Object[][]{
-                {1,ParkingType.CAR,false},
-                {2,ParkingType.CAR,true},
-                {3,ParkingType.BIKE,false},
-                {4,ParkingType.BIKE,true}
+                {1,ParkingType.CAR},
+                {2,ParkingType.BIKE}
         };
     }
-    /*
+
     @ParameterizedTest
     @MethodSource("incomingType")
-    public void processIncomingVehicleTest(int parkingSpotNumber, ParkingType IncomingParkingType,Boolean isRecurringVehicle){
+    public void processIncomingVehicleTest(int userChoice, ParkingType IncomingParkingType){
         try {
             when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-            when(inputReaderUtil.readSelection()).thenReturn(1);
-
+            when(inputReaderUtil.readSelection()).thenReturn(userChoice);
+            when(parkingSpotDAO.getNextAvailableSlot(IncomingParkingType)).thenReturn(1);
         } catch (Exception e) {
             e.printStackTrace();
             throw  new RuntimeException("Failed to set up test mock objects");
         }
-            //parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-            //int parkingNumber = parkingSpotNumber;
-            ParkingSpot parkingSpot = new ParkingSpot(parkingSpotNumber, IncomingParkingType,true);
-            //when(parkingService.getNextParkingNumberIfAvailable()).thenReturn(parkingSpot);
+
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //WHEN
-        Ticket ticket = new Ticket();
         parkingService.processIncomingVehicle();
 
         //THEN
         verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
-    }*/
+    }
 
     @ParameterizedTest
     @MethodSource("parkingType")
@@ -114,14 +114,24 @@ public class ParkingServiceTest {
         ParkingSpot parkingSpot = new ParkingSpot(-1, parkingType, false);
 
         //WHEN
-
         //THEN
         assertThrows(Exception.class, () -> parkingService.getNextParkingNumberIfAvailable());
     }
-    /*
+
+    @Disabled
     @ParameterizedTest
     @MethodSource("parkingType")
-    public void getIncorrectVehicleType_ThenThrowIllegalArgumentException(ParkingType parkingType){
+    public void getIncorrectVehicleType_ThenThrowIllegalArgumentException(ParkingType parkingType)throws Exception{
+        parkingService = new ParkingService(inputReaderUtil,parkingSpotDAO,ticketDAO);
+        Method method = ParkingService.class.getDeclaredMethod("getVehicleType",String.class);
+        method.setAccessible(true);
+        try{
+            method.invoke(parkingService,"");
+            fail("this code should not has been reached.");
+        }catch(InvocationTargetException e){
+            assertThat(e.getCause()).isInstanceOf(IllegalArgumentException.class);
+        }
+        /*
         //GIVEN
         parkingType = null;
         ParkingSpot parkingSpot = new ParkingSpot(1, parkingType,false);
@@ -130,8 +140,8 @@ public class ParkingServiceTest {
 
         //THEN
         assertThrows(IllegalArgumentException.class,()->parkingService.getVehicleType());
-
-    }*/
+        */
+    }
 
     /*
     @ParameterizedTest

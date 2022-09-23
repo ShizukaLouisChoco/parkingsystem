@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +26,6 @@ public class ParkingDataBaseIT {
     private static ParkingSpotDAO parkingSpotDAO;
     private static TicketDAO ticketDAO;
     private static DataBasePrepareService dataBasePrepareService;
-
 
     private static final String regNumber = "ABCDEF";
 
@@ -70,6 +70,7 @@ public class ParkingDataBaseIT {
         Assertions.assertNotNull(createdTicket);
         Assertions.assertFalse(createdTicket.getParkingSpot().isAvailable());
     }
+
 
     @Test
     public void testParkingLotExit(){

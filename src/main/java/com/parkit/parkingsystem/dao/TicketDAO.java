@@ -32,6 +32,7 @@ public class TicketDAO {
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
             return ps.execute();
+            //todo pas besoin de close ps?
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
@@ -59,6 +60,7 @@ public class TicketDAO {
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
             }
+            //todo  besoin de close rs et ps?
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
 
@@ -82,7 +84,7 @@ public class TicketDAO {
             ps.setInt(4,ticket.getId());
             ps.execute();
             return true;
-            //todo:cloture ps et rs
+            //todo:pas besoin de close ps?
         }catch (Exception ex){
             logger.error("Error saving ticket info",ex);
         }finally {
@@ -103,6 +105,9 @@ public class TicketDAO {
                 return (recurringTime > 0);
                 //todo cloture ps et rs
             }
+            //todo: besoin de close rs et ps?
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
         }catch (Exception ex){
             logger.error("Error verifying recurring user or not",ex);
         }finally {

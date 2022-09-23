@@ -87,11 +87,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
                     <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-                    <excludes>
-                        <exclude>src/main/java/com/parkit/parkingsystem/config/*</exclude>
-                        <exclude>src/main/java/com/parkit/parkingsystem/constants/*</exclude>
-                        <exclude>src/main/java/com/parkit/parkingsystem/model/*</exclude>
-                    </excludes>
+
                 </configuration>
                 <reportSets>
                     <reportSet>
