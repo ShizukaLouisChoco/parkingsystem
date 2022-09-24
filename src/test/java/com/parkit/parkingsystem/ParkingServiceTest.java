@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem;
 
+import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -19,8 +20,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.Date;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -37,6 +40,7 @@ public class ParkingServiceTest {
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
+
 
     @BeforeEach
     public void setUpPerTest() {
@@ -106,56 +110,40 @@ public class ParkingServiceTest {
         //THEN
         verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
     }
-
-    @ParameterizedTest
-    @MethodSource("parkingType")
-    public void NextParkingNumberIsNotAvailable_ThenThrowsException(ParkingType parkingType) {
-        //GIVEN
-        ParkingSpot parkingSpot = new ParkingSpot(-1, parkingType, false);
-
-        //WHEN
-        //THEN
-        assertThrows(Exception.class, () -> parkingService.getNextParkingNumberIfAvailable());
-    }
-
-    @Disabled
-    @ParameterizedTest
-    @MethodSource("parkingType")
-    public void getIncorrectVehicleType_ThenThrowIllegalArgumentException(ParkingType parkingType)throws Exception{
-        parkingService = new ParkingService(inputReaderUtil,parkingSpotDAO,ticketDAO);
-        Method method = ParkingService.class.getDeclaredMethod("getVehicleType",String.class);
-        method.setAccessible(true);
-        try{
-            method.invoke(parkingService,"");
-            fail("this code should not has been reached.");
-        }catch(InvocationTargetException e){
-            assertThat(e.getCause()).isInstanceOf(IllegalArgumentException.class);
-        }
-        /*
-        //GIVEN
-        parkingType = null;
-        ParkingSpot parkingSpot = new ParkingSpot(1, parkingType,false);
-
-        //WHEN
-
-        //THEN
-        assertThrows(IllegalArgumentException.class,()->parkingService.getVehicleType());
-        */
-    }
-
     /*
     @ParameterizedTest
     @MethodSource("parkingType")
-    public void getVehicleTypeBIKE(ParkingType parkingType){
-        //GIVEN
-        ParkingSpot parkingSpot = new ParkingSpot(-1, parkingType,false);
+    public void NextParkingNumberIsNotAvailable_ThenThrowsException(ParkingType parkingType) throws SQLException, ClassNotFoundException {
+        try {
+            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+            when(inputReaderUtil.readSelection()).thenReturn(1);
+            when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw  new RuntimeException("Failed to set up test mock objects");
+        }
 
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //WHEN
-
         //THEN
-        assertThrows(Exception.class,()->parkingService.getNextParkingNumberIfAvailable());
-
+        Exception e = assertThrows(Exception.class,() ->parkingService.getNextParkingNumberIfAvailable());
+        assertEquals("Error fetching next available parking slot",e.getMessage());
+        assertThrows(Exception.class, () -> parkingService.getNextParkingNumberIfAvailable());
+        //todo: ERROR mais pas exception
     }
 */
+
+    @Test
+    public void getIncorrectVehicleType_ThenThrowIllegalArgumentException()throws Exception{
+        parkingService = new ParkingService(inputReaderUtil,parkingSpotDAO,ticketDAO);
+        Method method = ParkingService.class.getDeclaredMethod("getVehicleType");
+        method.setAccessible(true);
+        try{
+            ParkingType parkingType1 = (ParkingType)method.invoke(parkingService);
+        }catch(InvocationTargetException e){
+            assertThat(e.getCause()).isInstanceOf(IllegalArgumentException.class);
+        }
+        //todo: private method
+    }
 
 }

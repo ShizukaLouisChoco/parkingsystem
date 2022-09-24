@@ -96,7 +96,7 @@ public class ParkingDataBaseIT {
 
         //THEN
         Ticket exitTicket = ticketDAO.getTicket(regNumber);
-        Assertions.assertEquals(ticket.getId(), exitTicket.getId() );
+        Assertions.assertEquals(ticket.getIdTicket(), exitTicket.getIdTicket() );
         Assertions.assertEquals(ticket.getVehicleRegNumber(), exitTicket.getVehicleRegNumber() );
         Assertions.assertEquals(ticket.getInTime(), exitTicket.getInTime() );
         Assertions.assertNotNull(exitTicket.getOutTime());

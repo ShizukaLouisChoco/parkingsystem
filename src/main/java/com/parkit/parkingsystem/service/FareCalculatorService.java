@@ -32,12 +32,10 @@ public class FareCalculatorService {
 
             switch (ticket.getParkingSpot().getParkingType()){
                 case CAR: {
-                    recurringMessage();
                     price = Math.round((duration * discountFare * Fare.CAR_RATE_PER_HOUR * 100.0) / 100.0);
                     break;
                 }
                 case BIKE: {
-                    recurringMessage();
                     price = Math.round((duration * discountFare * Fare.BIKE_RATE_PER_HOUR * 100.0) / 100.0);
                     break;
                 }
@@ -50,9 +48,5 @@ public class FareCalculatorService {
 
 
     }
-    public void recurringMessage() {
-        if (ticket.isDiscount()) {
-            System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
-        }
-    }
+
 }

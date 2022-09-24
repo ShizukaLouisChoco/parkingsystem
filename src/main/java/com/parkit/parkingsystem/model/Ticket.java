@@ -1,10 +1,9 @@
 package com.parkit.parkingsystem.model;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 public class Ticket {
-    private int id;
+    private int idTicket;
     private ParkingSpot parkingSpot;
     private String vehicleRegNumber;
     private double price;
@@ -12,12 +11,12 @@ public class Ticket {
     private Date outTime;
     private boolean discount = false;
 
-    public int getId() {
-        return id;
+    public int getIdTicket() {
+        return idTicket;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdTicket(int idTicket) {
+        this.idTicket = idTicket;
     }
 
     public ParkingSpot getParkingSpot() {
