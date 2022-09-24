@@ -48,6 +48,7 @@ public class TicketDAO {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
             ps.setString(1,vehicleRegNumber);
+
             ResultSet rs = ps.executeQuery();
             //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             if(rs.next()){
@@ -70,6 +71,45 @@ public class TicketDAO {
             dataBaseConfig.closeConnection(con);
         }
 
+       return ticket;
+    }
+
+    public Ticket getTicketById(int ticketId ) {
+        Connection con = null;
+        Ticket ticket = null;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET_BY_ID);
+            ps.setInt(1,ticketId);
+
+            ResultSet rs = ps.executeQuery();
+            //t.PARKING_NUMBER, t.VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME,)
+            if(rs.next()){
+                ticket = new Ticket();
+                int parkingNumber = rs.getInt(1);
+                ParkingType parkingType;
+                if(parkingNumber>=3){
+                     parkingType = ParkingType.CAR;
+                }else{
+                    parkingType = ParkingType.BIKE;
+                }
+                ParkingSpot parkingSpot = new ParkingSpot(parkingNumber,parkingType,false);
+                ticket.setParkingSpot(parkingSpot);
+                ticket.setIdTicket(ticketId);
+                ticket.setVehicleRegNumber(rs.getString(2));
+                ticket.setPrice(rs.getDouble(3));
+                ticket.setInTime(rs.getTimestamp(4));
+                ticket.setOutTime(rs.getTimestamp(5));
+            }
+            //todo  besoin de close rs et ps?
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+
+        }catch (Exception ex){
+            logger.error("Error fetching next available slot",ex);
+        }finally {
+            dataBaseConfig.closeConnection(con);
+        }
        return ticket;
     }
 

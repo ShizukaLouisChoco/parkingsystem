@@ -73,7 +73,7 @@ public class ParkingDataBaseIT {
 
 
     @Test
-    public void testParkingLotExit(){
+    public void testParkingLotExit() throws Exception {
         //GIVEN
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //Vehicle incoming
@@ -93,9 +93,8 @@ public class ParkingDataBaseIT {
 
         //WHEN
         parkingService.processExitingVehicle();
-
         //THEN
-        Ticket exitTicket = ticketDAO.getTicket(regNumber);
+        Ticket exitTicket = ticketDAO.getTicketById(ticket.getIdTicket());
         Assertions.assertEquals(ticket.getIdTicket(), exitTicket.getIdTicket() );
         Assertions.assertEquals(ticket.getVehicleRegNumber(), exitTicket.getVehicleRegNumber() );
         Assertions.assertEquals(ticket.getInTime(), exitTicket.getInTime() );
