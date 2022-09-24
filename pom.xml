@@ -16,6 +16,7 @@
     </properties>
 
 <!--DEPENDENCIES-->
+
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -83,11 +84,22 @@
     <reporting>
         <plugins>
             <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.1.1</version>
+            </plugin>
+            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
                     <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-
+                        <excludes>
+                            <exclude>**/com/parkit/parkingsystem/config/*</exclude>
+                            <exclude>**/com/parkit/parkingsystem/constants/*</exclude>
+                            <exclude>**/com/parkit/parkingsystem/model/*</exclude>
+                            <exclude>**/com/parkit/parkingsystem/util/*</exclude>
+                            <exclude>**/com/parkit/parkingsystem/*</exclude>
+                        </excludes>
                 </configuration>
                 <reportSets>
                     <reportSet>
@@ -102,6 +114,22 @@
 <!--BUILD-->
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.7.1.1</version>
+                <configuration>
+                    <includeFilterFile>spotbugs-security-include.xml</includeFilterFile>
+                    <excludeFilterFile>spotbugs-security-exclude.xml</excludeFilterFile>
+                    <plugins>
+                        <plugin>
+                            <groupId>com.h3xstream.findsecbugs</groupId>
+                            <artifactId>findsecbugs-plugin</artifactId>
+                            <version>1.12.0</version>
+                        </plugin>
+                    </plugins>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
