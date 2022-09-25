@@ -5,8 +5,6 @@ import com.parkit.parkingsystem.model.Ticket;
 
 import java.util.Date;
 
-import static com.parkit.parkingsystem.constants.DBConstants.ticket;
-
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket){

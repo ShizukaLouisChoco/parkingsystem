@@ -26,7 +26,7 @@ public class ParkingSpot {
     }
 
     public void setParkingType(ParkingType parkingType) {
-        this.parkingType = parkingType;
+      this.parkingType = parkingType;
     }
 
     public boolean isAvailable() {
