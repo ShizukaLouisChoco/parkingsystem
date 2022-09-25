@@ -41,33 +41,47 @@ public class FareCalculatorServiceTest {
                 { ParkingType.BIKE , 29 ,false, 0},
                 { ParkingType.CAR , 29 ,true, 0},
                 { ParkingType.BIKE , 29 ,true, 0},
-                { ParkingType.CAR , 30 ,false , Math.round(0.5 * (Fare.CAR_RATE_PER_HOUR * 100.0) / 100.0)}, //30 minutes
-                { ParkingType.BIKE , 30 ,false , Math.round( 0.5 *  (Fare.BIKE_RATE_PER_HOUR* 100.0) / 100.0)},
-                { ParkingType.CAR , 30 ,true , Math.round(0.5 * ((Fare.CAR_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.BIKE , 30 , true , Math.round(0.5 *  ((Fare.BIKE_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.CAR , 45 ,false , Math.round(0.75 * ((Fare.CAR_RATE_PER_HOUR)* 100.0) / 100.0)}, //45minutes
-                { ParkingType.BIKE , 45 ,false , Math.round(0.75 * ((Fare.BIKE_RATE_PER_HOUR)* 100.0) / 100.0)},
-                { ParkingType.CAR , 45 , true ,Math.round(0.75 * ((Fare.CAR_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.BIKE , 45 , true ,Math.round(0.75 * ((Fare.BIKE_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.CAR ,  60 ,false , Math.round(1 * ((Fare.CAR_RATE_PER_HOUR)* 100.0) / 100.0)},//1 hour
-                { ParkingType.BIKE , 60 ,false , Math.round(1 * ((Fare.BIKE_RATE_PER_HOUR)* 100.0) / 100.0)},
-                { ParkingType.CAR ,  60 , true ,Math.round(1 * ((Fare.CAR_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.BIKE , 60 , true ,Math.round(1 * ((Fare.BIKE_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.CAR , 120 ,false , Math.round(2 * ((Fare.CAR_RATE_PER_HOUR)* 100.0) / 100.0)},//2 hours
-                { ParkingType.BIKE , 120 ,false , Math.round(2 * ((Fare.BIKE_RATE_PER_HOUR)* 100.0) / 100.0)},
-                { ParkingType.CAR , 120 , true ,Math.round(2 * ((Fare.CAR_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.BIKE , 120 , true ,Math.round(2 * ((Fare.BIKE_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.CAR , 1440 ,false , Math.round(24 * ((Fare.CAR_RATE_PER_HOUR)* 100.0) / 100.0)},//24 hours
-                { ParkingType.BIKE , 1440 ,false , Math.round(24 * ((Fare.BIKE_RATE_PER_HOUR)* 100.0) / 100.0)},
-                { ParkingType.CAR , 1440 , true ,Math.round(24 * ((Fare.CAR_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.BIKE , 1440 , true ,Math.round(24 * ((Fare.BIKE_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.CAR , 2880 ,false , Math.round(24 * ((Fare.CAR_RATE_PER_HOUR)* 100.0) / 100.0)},//48 hours
-                { ParkingType.BIKE , 2880 ,false , Math.round(24 * ((Fare.BIKE_RATE_PER_HOUR)* 100.0) / 100.0)},
-                { ParkingType.CAR , 2880 , true ,Math.round(24 * ((Fare.CAR_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
-                { ParkingType.BIKE , 2880 , true ,Math.round(24 * ((Fare.BIKE_RATE_PER_HOUR*0.95)* 100.0) / 100.0)},
+                { ParkingType.CAR , 30 ,false , roundPrice(0.5,ParkingType.CAR,false)}, //30 minutes
+                { ParkingType.BIKE , 30 ,false , roundPrice( 0.5,ParkingType.BIKE,false)},
+                { ParkingType.CAR , 30 ,true , roundPrice(0.5,ParkingType.CAR,true)},
+                { ParkingType.BIKE , 30 , true , roundPrice(0.5,ParkingType.BIKE,true)},
+                { ParkingType.CAR , 45 ,false , roundPrice(0.75,ParkingType.CAR,false)}, //45minutes
+                { ParkingType.BIKE , 45 ,false , roundPrice(0.75,ParkingType.BIKE,false)},
+                { ParkingType.CAR , 45 , true ,roundPrice(0.75,ParkingType.CAR,true)},
+                { ParkingType.BIKE , 45 , true ,roundPrice(0.75,ParkingType.BIKE,true)},
+                { ParkingType.CAR ,  60 ,false , roundPrice(1,ParkingType.CAR,false)},//1 hour
+                { ParkingType.BIKE , 60 ,false , roundPrice(1,ParkingType.BIKE,false)},
+                { ParkingType.CAR ,  60 , true ,roundPrice(1,ParkingType.CAR,true)},
+                { ParkingType.BIKE , 60 , true ,roundPrice(1,ParkingType.BIKE,true)},
+                { ParkingType.CAR , 120 ,false , roundPrice(2,ParkingType.CAR,false)},//2 hours
+                { ParkingType.BIKE , 120 ,false , roundPrice(2,ParkingType.BIKE,false)},
+                { ParkingType.CAR , 120 , true ,roundPrice(2,ParkingType.CAR,true)},
+                { ParkingType.BIKE , 120 , true ,roundPrice(2,ParkingType.BIKE,true)},
+                { ParkingType.CAR , 1440 ,false , roundPrice(24,ParkingType.CAR,false)},//24 hours
+                { ParkingType.BIKE , 1440 ,false , roundPrice(24,ParkingType.BIKE,false)},
+                { ParkingType.CAR , 1440 , true ,roundPrice(24,ParkingType.CAR,true)},
+                { ParkingType.BIKE , 1440 , true ,roundPrice(24,ParkingType.BIKE,true)},
+                { ParkingType.CAR , 2880 ,false , roundPrice(24,ParkingType.CAR,false)},//48 hours
+                { ParkingType.BIKE , 2880 ,false , roundPrice(24,ParkingType.BIKE,false)},
+                { ParkingType.CAR , 2880 , true ,roundPrice(24,ParkingType.CAR,true)},
+                { ParkingType.BIKE , 2880 , true ,roundPrice(24,ParkingType.BIKE,true)},
         };
     }
 
+    private static Object roundPrice(double timeInHour, ParkingType parkingType, Boolean discount){
+        switch (parkingType){
+            case CAR:{
+                if(discount) return  Math.round(timeInHour * ((Fare.CAR_RATE_PER_HOUR*0.95)* 100.0) / 100.0);
+                return Math.round(timeInHour * ((Fare.CAR_RATE_PER_HOUR)* 100.0) / 100.0);
+
+            }case BIKE:{
+                if(discount) return  Math.round(timeInHour * ((Fare.BIKE_RATE_PER_HOUR*0.95)* 100.0) / 100.0);
+                return Math.round(timeInHour * ((Fare.BIKE_RATE_PER_HOUR)* 100.0) / 100.0);
+            } default:{
+                return 0;
+            }
+        }
+    }
 
 
     @ParameterizedTest
