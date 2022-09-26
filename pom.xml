@@ -99,6 +99,7 @@
                             <exclude>**/com/parkit/parkingsystem/model/*</exclude>
                             <exclude>**/com/parkit/parkingsystem/util/*</exclude>
                             <exclude>**/com/parkit/parkingsystem/*</exclude>
+                            <exclude>**/com/parkit/parkingsystem/service/Interactive*</exclude>
                         </excludes>
                 </configuration>
                 <reportSets>
@@ -199,6 +200,7 @@
                         <exclude>**/com/parkit/parkingsystem/model/*</exclude>
                         <exclude>**/com/parkit/parkingsystem/util/*</exclude>
                         <exclude>**/com/parkit/parkingsystem/*</exclude>
+                        <exclude>**/com/parkit/parkingsystem/service/Interactive*</exclude>
                     </excludes>
                 </configuration>
                 <executions>
