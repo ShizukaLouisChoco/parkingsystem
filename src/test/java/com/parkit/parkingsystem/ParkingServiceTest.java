@@ -86,15 +86,11 @@ public class ParkingServiceTest {
 
     @ParameterizedTest
     @MethodSource("incomingType")
-    public void processIncomingVehicleTest(int userChoice, ParkingType IncomingParkingType){
-        try {
-            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-            when(inputReaderUtil.readSelection()).thenReturn(userChoice);
-            when(parkingSpotDAO.getNextAvailableSlot(IncomingParkingType)).thenReturn(1);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw  new RuntimeException("Failed to set up test mock objects");
-        }
+    public void processIncomingVehicleTest(int userChoice, ParkingType IncomingParkingType) {
+
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        when(inputReaderUtil.readSelection()).thenReturn(userChoice);
+        when(parkingSpotDAO.getNextAvailableSlot(IncomingParkingType)).thenReturn(1);
 
         //WHEN
         parkingService.processIncomingVehicle();
@@ -102,40 +98,4 @@ public class ParkingServiceTest {
         //THEN
         verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
     }
-    /*
-    @ParameterizedTest
-    @MethodSource("parkingType")
-    public void NextParkingNumberIsNotAvailable_ThenThrowsException(ParkingType parkingType) throws SQLException, ClassNotFoundException {
-        try {
-            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-            when(inputReaderUtil.readSelection()).thenReturn(1);
-            when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(0);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw  new RuntimeException("Failed to set up test mock objects");
-        }
-
-        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        //WHEN
-        //THEN
-        Exception e = assertThrows(Exception.class,() ->parkingService.getNextParkingNumberIfAvailable());
-        assertEquals("Error fetching next available parking slot",e.getMessage());
-        assertThrows(Exception.class, () -> parkingService.getNextParkingNumberIfAvailable());
-        //todo: ERROR mais pas exception
-    }
-*/
-
-    @Test
-    public void getIncorrectVehicleType_ThenThrowIllegalArgumentException()throws Exception{
-        parkingService = new ParkingService(inputReaderUtil,parkingSpotDAO,ticketDAO);
-        Method method = ParkingService.class.getDeclaredMethod("getVehicleType");
-        method.setAccessible(true);
-        try{
-            ParkingType parkingType1 = (ParkingType)method.invoke(parkingService);
-        }catch(InvocationTargetException e){
-            assertThat(e.getCause()).isInstanceOf(IllegalArgumentException.class);
-        }
-        //todo: private method
-    }
-
 }
