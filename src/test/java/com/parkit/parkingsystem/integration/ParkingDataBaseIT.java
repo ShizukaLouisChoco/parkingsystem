@@ -7,7 +7,13 @@ import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.junit.jupiter.api.*;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -47,12 +53,12 @@ public class ParkingDataBaseIT {
     }
 
     @AfterAll
-    public static void tearDown(){
+    public static void tearDown() {
 
     }
 
     @Test
-    public void testParkingACar(){
+    public void testParkingACar() {
         //GIVEN
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
@@ -71,7 +77,7 @@ public class ParkingDataBaseIT {
 
 
     @Test
-    public void testParkingLotExit(){
+    public void testParkingLotExit() {
         //GIVEN
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         //Vehicle incoming
@@ -83,7 +89,7 @@ public class ParkingDataBaseIT {
         Assertions.assertEquals(0, ticket.getPrice());
 
         //update intime
-        Date inTimeMinusTwoHours = new Timestamp(ticket.getInTime().getTime() - (1000 *60 * 60 *2));
+        Date inTimeMinusTwoHours = new Timestamp(ticket.getInTime().getTime() - (1000 * 60 * 60 * 2));
 
         ticket.setInTime(inTimeMinusTwoHours);
         ticketDAO.updateTicket(ticket);
@@ -93,12 +99,12 @@ public class ParkingDataBaseIT {
         parkingService.processExitingVehicle();
         //THEN
         Ticket exitTicket = ticketDAO.getTicketById(ticket.getIdTicket());
-        Assertions.assertEquals(ticket.getIdTicket(), exitTicket.getIdTicket() );
-        Assertions.assertEquals(ticket.getVehicleRegNumber(), exitTicket.getVehicleRegNumber() );
-        Assertions.assertEquals(ticket.getInTime(), exitTicket.getInTime() );
+        Assertions.assertEquals(ticket.getIdTicket(), exitTicket.getIdTicket());
+        Assertions.assertEquals(ticket.getVehicleRegNumber(), exitTicket.getVehicleRegNumber());
+        Assertions.assertEquals(ticket.getInTime(), exitTicket.getInTime());
         Assertions.assertNotNull(exitTicket.getOutTime());
         Assertions.assertTrue(exitTicket.getOutTime().after(exitTicket.getInTime()));
-        Assertions.assertTrue( exitTicket.getPrice() > 0 );
+        Assertions.assertTrue(exitTicket.getPrice() > 0);
     }
 
 }

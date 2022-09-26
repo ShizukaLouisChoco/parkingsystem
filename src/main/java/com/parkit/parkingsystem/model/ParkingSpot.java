@@ -3,22 +3,22 @@ package com.parkit.parkingsystem.model;
 import com.parkit.parkingsystem.constants.ParkingType;
 
 public class ParkingSpot {
-    private int number;
+    private int parkingNumber;
     private ParkingType parkingType;
     private boolean isAvailable;
 
-    public ParkingSpot(int number, ParkingType parkingType, boolean isAvailable) {
-        this.number = number;
+    public ParkingSpot(int parkingNumber, ParkingType parkingType, boolean isAvailable) {
+        this.parkingNumber = parkingNumber;
         this.parkingType = parkingType;
         this.isAvailable = isAvailable;
     }
 
     public int getId() {
-        return number;
+        return parkingNumber;
     }
 
-    public void setId(int number) {
-        this.number = number;
+    public void setId(int parkingNumber) {
+        this.parkingNumber = parkingNumber;
     }
 
     public ParkingType getParkingType() {
@@ -42,9 +42,9 @@ public class ParkingSpot {
         if(this == o)return true;
         if(o == null||getClass() !=o.getClass())return false;
         ParkingSpot that = (ParkingSpot) o;
-        return number == that.number;
+        return parkingNumber == that.parkingNumber;
     }
 
     @Override
-    public int hashCode(){return number;}
+    public int hashCode(){return parkingNumber;}
 }
