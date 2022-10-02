@@ -51,16 +51,12 @@ public class ParkingServiceTest {
     @ParameterizedTest
     @MethodSource("parkingType")
     public void processExitingVehicleTest(ParkingType parkingType) {
-        try {
-            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to set up test mock objects");
-        }
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("123456789");
         //GIVEN
         ParkingSpot parkingSpot = new ParkingSpot(1, parkingType, false);
 
         Ticket ticket = new Ticket();
+        //reset inTime one hour before
         ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
         ticket.setParkingSpot(parkingSpot);
         ticket.setVehicleRegNumber("123456789");
@@ -73,11 +69,13 @@ public class ParkingServiceTest {
         parkingService.processExitingVehicle();
 
         //THEN
+        //verify the method .updateParking is called 1 time
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 
     }
 
     private static Object[][] incomingType() {
+        //userChoice, parkingType
         return new Object[][]{
                 {1, ParkingType.CAR},
                 {2, ParkingType.BIKE}
@@ -96,6 +94,7 @@ public class ParkingServiceTest {
         parkingService.processIncomingVehicle();
 
         //THEN
+        //verify the method .saveTicket is called 1 time
         verify(ticketDAO, times(1)).saveTicket(any(Ticket.class));
     }
 }
