@@ -62,7 +62,7 @@ public class ParkingDataBaseIT {
         //GIVEN
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
-        //Ticket doesn't exist
+        //verify that ticket doesn't exist
         Assertions.assertNull(ticketDAO.getTicket(regNumber));
 
         //WHEN
@@ -71,7 +71,9 @@ public class ParkingDataBaseIT {
 
         //THEN
         Ticket createdTicket = ticketDAO.getTicket(regNumber);
+        //Ticket is NOT null
         Assertions.assertNotNull(createdTicket);
+        //the availability of the parking spot is false
         Assertions.assertFalse(createdTicket.getParkingSpot().isAvailable());
     }
 
@@ -85,25 +87,31 @@ public class ParkingDataBaseIT {
 
         //Get created ticket
         Ticket ticket = ticketDAO.getTicket(regNumber);
+        //ticket is NOT null
         Assertions.assertNull(ticket.getOutTime());
+        //the price of the ticket is 0 before .processExitingVehicle
         Assertions.assertEquals(0, ticket.getPrice());
 
-        //update intime
+        //create intime is two hours before than original inTime
         Date inTimeMinusTwoHours = new Timestamp(ticket.getInTime().getTime() - (1000 * 60 * 60 * 2));
-
         ticket.setInTime(inTimeMinusTwoHours);
         ticketDAO.updateTicket(ticket);
-        System.out.println(ticket.getInTime());
 
         //WHEN
         parkingService.processExitingVehicle();
+
         //THEN
+        //create exiting ticket
         Ticket exitTicket = ticketDAO.getTicketById(ticket.getIdTicket());
+        //ticket ID, vehicle registration number and inTime must be the same
         Assertions.assertEquals(ticket.getIdTicket(), exitTicket.getIdTicket());
         Assertions.assertEquals(ticket.getVehicleRegNumber(), exitTicket.getVehicleRegNumber());
         Assertions.assertEquals(ticket.getInTime(), exitTicket.getInTime());
+        //exiting ticket's outTime is NOT null
         Assertions.assertNotNull(exitTicket.getOutTime());
+        //the outTime is after the inTime
         Assertions.assertTrue(exitTicket.getOutTime().after(exitTicket.getInTime()));
+        //the price is more than 0
         Assertions.assertTrue(exitTicket.getPrice() > 0);
     }
 
