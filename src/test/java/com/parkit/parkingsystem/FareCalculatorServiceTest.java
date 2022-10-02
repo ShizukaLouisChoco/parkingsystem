@@ -35,7 +35,7 @@ public class FareCalculatorServiceTest {
 
     private static Object[][] calculateFareAll() {
         return new Object[][]{
-                //ParkingType, minutes, discount, expected price
+                //ParkingType, minutes, isDiscount, expected price
                 {ParkingType.CAR, 5, false, 0}, //5 minutes
                 {ParkingType.CAR, 5, true, 0},
                 {ParkingType.BIKE, 5, false, 0},
@@ -72,18 +72,19 @@ public class FareCalculatorServiceTest {
     }
 
     private static Object roundPrice(double timeInHour, ParkingType parkingType, Boolean discount) {
+        //method for calculateFareAll
         switch (parkingType) {
             case CAR: {
                 if (discount) {
-                    return  Math.round(timeInHour * ((Fare.CAR_RATE_PER_HOUR * 0.95) * 100.0) / 100.0);
+                    return  Math.round(timeInHour * (Fare.CAR_RATE_PER_HOUR * 0.95) * 100.0) / 100.0;
                 } else {
-                return Math.round(timeInHour * ((Fare.CAR_RATE_PER_HOUR) * 100.0) / 100.0);
+                return Math.round(timeInHour * (Fare.CAR_RATE_PER_HOUR) * 100.0) / 100.0;
                 }
             }case BIKE: {
                 if (discount) {
-                    return  Math.round(timeInHour * ((Fare.BIKE_RATE_PER_HOUR * 0.95) * 100.0) / 100.0);
+                    return  Math.round(timeInHour * (Fare.BIKE_RATE_PER_HOUR * 0.95) * 100.0) / 100.0;
                 } else {
-                    return Math.round(timeInHour * ((Fare.BIKE_RATE_PER_HOUR) * 100.0) / 100.0);
+                    return Math.round(timeInHour * (Fare.BIKE_RATE_PER_HOUR) * 100.0) / 100.0;
                 }
             } default: {
                 return 0;
@@ -99,6 +100,7 @@ public class FareCalculatorServiceTest {
         ParkingSpot parkingSpot = new ParkingSpot(1, parkingType, false);
 
         Date inTime = new Date();
+        //reset inTime in various minutes
         inTime.setTime(System.currentTimeMillis() - (timeInMinute * 60 * 1000));
         Date outTime = new Date();
 
@@ -117,13 +119,16 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareUnknownType() {
         Date inTime = new Date();
+        //reset inTime one hour before
         inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
         Date outTime = new Date();
+        //parkingType is null
         ParkingSpot parkingSpot = new ParkingSpot(1, null, false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+        //NullPointerException must be thrown
         assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
@@ -137,6 +142,7 @@ public class FareCalculatorServiceTest {
     @MethodSource("vehicleTypes")
     public void calculateFareWithFutureInTime(ParkingType parkingType) {
         Date inTime = new Date();
+        //reset inTime one hour later
         inTime.setTime(System.currentTimeMillis() + (60 * 60 * 1000));
         Date outTime = new Date();
         ParkingSpot parkingSpot = new ParkingSpot(1, parkingType, false);
@@ -144,6 +150,7 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+        //IllegalArgumentException must be thrown
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 }
