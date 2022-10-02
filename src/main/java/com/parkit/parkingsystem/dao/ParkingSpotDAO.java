@@ -17,6 +17,7 @@ public class ParkingSpotDAO {
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public int getNextAvailableSlot(ParkingType parkingType) {
+        //get the smallest parking number which is available
         Connection con = null;
         int result = -1;
         try {
@@ -38,7 +39,7 @@ public class ParkingSpotDAO {
     }
 
     public boolean updateParking(ParkingSpot parkingSpot) {
-        //update the availability fo that parking slot
+        //update the availability of the parking slot
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
