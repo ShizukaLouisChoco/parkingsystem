@@ -20,6 +20,7 @@ public class TicketDAO {
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public void saveTicket(Ticket ticket) {
+        //insert parking information in DB
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -30,9 +31,8 @@ public class TicketDAO {
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
-            //ps.setInt(6,ticket.getIdTicket());
             ps.execute();
-            //todo pas besoin de close ps?
+            dataBaseConfig.closePreparedStatement(ps);
         } catch (Exception ex) {
             logger.error("Error fetching next available slot", ex);
         } finally {
@@ -42,6 +42,7 @@ public class TicketDAO {
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
+        //find saved ticket information from DB
         Connection con = null;
         Ticket ticket = null;
         try {
@@ -61,7 +62,6 @@ public class TicketDAO {
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
             }
-            //todo  besoin de close rs et ps?
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
 
@@ -75,6 +75,7 @@ public class TicketDAO {
     }
 
     public Ticket getTicketById(int ticketId) {
+        //find saved ticket information from DB by ticket ID
         Connection con = null;
         Ticket ticket = null;
         try {
@@ -101,7 +102,6 @@ public class TicketDAO {
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
             }
-            //todo  besoin de close rs et ps?
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
 
@@ -114,6 +114,7 @@ public class TicketDAO {
     }
 
     public boolean updateTicket(Ticket ticket) {
+        //update ticket information in DB
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -123,8 +124,8 @@ public class TicketDAO {
             ps.setTimestamp(3, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
             ps.setInt(4, ticket.getIdTicket());
             ps.execute();
+            dataBaseConfig.closePreparedStatement(ps);
             return true;
-            //todo:pas besoin de close ps?
         } catch (Exception ex) {
             logger.error("Error saving ticket info", ex);
         } finally {
@@ -134,6 +135,7 @@ public class TicketDAO {
     }
 
     public boolean recurringVehicle(String vehicleRegNumber) {
+        //verify the user is recurring or not from vehicle register number
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
@@ -143,11 +145,9 @@ public class TicketDAO {
             if (rs.next()) {
                 int recurringTime = rs.getInt(1);
                 return (recurringTime > 0);
-                //todo cloture ps et rs
             }
-            //todo: besoin de close rs et ps?
-            dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
+            dataBaseConfig.closeResultSet(rs);
         } catch (Exception ex) {
             logger.error("Error verifying recurring user or not", ex);
         } finally {
