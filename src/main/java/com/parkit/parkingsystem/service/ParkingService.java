@@ -30,24 +30,25 @@ public class ParkingService {
     public void processIncomingVehicle() {
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
+                //allot this parking space and mark its availability as false
             if (parkingSpot != null && parkingSpot.getId() > 0) {
                 String vehicleRegNumber = getVehicleRegNumber();
                 parkingSpot.setAvailable(false);
-                parkingSpotDAO.updateParking(parkingSpot); //allot this parking space and mark its availability as false
+                parkingSpotDAO.updateParking(parkingSpot);
 
+                //creation of the incoming ticket
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
-                //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
+                //PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
 
+                //verify if the user came before in our parking
                 boolean isRecurringVehicle = ticketDAO.recurringVehicle(vehicleRegNumber);
                 ticket.setDiscount(isRecurringVehicle);
-
                 recurringMessage(ticket);
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
@@ -66,6 +67,7 @@ public class ParkingService {
     }
 
     public ParkingSpot getNextParkingNumberIfAvailable() {
+        //find available parking spot
         int parkingNumber;
         ParkingSpot parkingSpot = null;
         try {
@@ -104,11 +106,15 @@ public class ParkingService {
     }
 
     public void processExitingVehicle() {
+        //find ticket information from vehicle registration number
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
+            //verify if the user is recurring or not, 5% off for recurring vehicle
+            boolean isRecurringVehicle = ticketDAO.recurringVehicle(vehicleRegNumber);
+            ticket.setDiscount(isRecurringVehicle);
             fareCalculatorService.calculateFare(ticket);
             if (ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
