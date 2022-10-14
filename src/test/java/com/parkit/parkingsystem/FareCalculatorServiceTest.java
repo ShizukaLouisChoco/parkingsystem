@@ -64,10 +64,10 @@ public class FareCalculatorServiceTest {
                 {ParkingType.BIKE, 1440, false, roundPrice(24, ParkingType.BIKE, false)},
                 {ParkingType.CAR, 1440, true, roundPrice(24, ParkingType.CAR, true)},
                 {ParkingType.BIKE, 1440, true, roundPrice(24, ParkingType.BIKE, true)},
-                {ParkingType.CAR, 2880, false, roundPrice(24, ParkingType.CAR, false)}, //48 hours
-                {ParkingType.BIKE, 2880, false, roundPrice(24, ParkingType.BIKE, false)},
-                {ParkingType.CAR, 2880, true, roundPrice(24, ParkingType.CAR, true)},
-                {ParkingType.BIKE, 2880, true, roundPrice(24, ParkingType.BIKE, true)},
+                {ParkingType.CAR, 2880, false, roundPrice(48, ParkingType.CAR, false)}, //48 hours
+                {ParkingType.BIKE, 2880, false, roundPrice(48, ParkingType.BIKE, false)},
+                {ParkingType.CAR, 2880, true, roundPrice(48, ParkingType.CAR, true)},
+                {ParkingType.BIKE, 2880, true, roundPrice(48, ParkingType.BIKE, true)},
         };
     }
 

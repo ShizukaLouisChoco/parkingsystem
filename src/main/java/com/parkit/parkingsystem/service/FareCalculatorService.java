@@ -23,9 +23,6 @@ public class FareCalculatorService {
         if (duration < 0.5) {
             price = 0;
         } else {
-            //if parking time is more than 24 hours, parking time is fixed to 24 hours
-            if (duration > 24)
-                duration = 24;
 
             //if isDiscount is true, price is 5% off
             double discountFare = ticket.isDiscount()
