@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.model;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class Ticket {
     private int idTicket;
@@ -20,11 +21,11 @@ public class Ticket {
     }
 
     public ParkingSpot getParkingSpot() {
-        return parkingSpot;
+        return parkingSpot = new ParkingSpot(parkingSpot.getId(), parkingSpot.getParkingType(), parkingSpot.isAvailable());
     }
 
     public void setParkingSpot(ParkingSpot parkingSpot) {
-        this.parkingSpot = parkingSpot;
+        this.parkingSpot = new ParkingSpot(parkingSpot.getId(), parkingSpot.getParkingType(), parkingSpot.isAvailable());
     }
 
     public String getVehicleRegNumber() {
@@ -44,19 +45,20 @@ public class Ticket {
     }
 
     public Date getInTime() {
-        return inTime;
+        return inTime = new Date(inTime.getTime());
     }
 
     public void setInTime(Date inTime) {
-        this.inTime = inTime;
+
+        this.inTime = new Date(inTime.getTime());
     }
 
     public Date getOutTime() {
-        return outTime;
+        return outTime = Optional.ofNullable(outTime).map(d -> new Date(d.getTime())).orElse(null);
     }
 
     public void setOutTime(Date outTime) {
-        this.outTime = outTime;
+        this.outTime = Optional.ofNullable(outTime).map(d -> new Date(d.getTime())).orElse(null);
     }
 
     public boolean isDiscount(){
