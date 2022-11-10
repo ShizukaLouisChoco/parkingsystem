@@ -79,6 +79,12 @@
             <artifactId>maven-assembly-plugin</artifactId>
             <version>3.4.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 <!--REPORTING-->
     <reporting>
@@ -93,6 +99,7 @@
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <configuration>
                     <outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
+                       <!--
                         <excludes>
                             <exclude>**/com/parkit/parkingsystem/config/*</exclude>
                             <exclude>**/com/parkit/parkingsystem/constants/*</exclude>
@@ -101,6 +108,7 @@
                             <exclude>**/com/parkit/parkingsystem/*</exclude>
                             <exclude>**/com/parkit/parkingsystem/service/Interactive*</exclude>
                         </excludes>
+                        -->
                 </configuration>
                 <reportSets>
                     <reportSet>
